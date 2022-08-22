@@ -11,9 +11,9 @@ const RequireAuth = () => {
     token = document?.cookie
       ?.split("; ")
       ?.find((row) => row.startsWith("token="))
-      .split("=")[1];
+      ?.split("=")[1];
     console.log("require auth", token);
-  });
+  }, []);
   return token ? <Outlet /> : <Navigate to={"/"} />;
 };
 export default RequireAuth;

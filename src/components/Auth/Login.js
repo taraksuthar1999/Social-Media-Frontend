@@ -29,7 +29,7 @@ const Login = (props) => {
   const onSubmit = async (formData) => {
     props.login(formData);
     console.log("cookie", document.cookie);
-    // navigate("welcome");
+    props.handler();
   };
   const formik = useFormik({
     initialValues: initFormData,

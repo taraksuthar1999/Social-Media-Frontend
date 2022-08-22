@@ -1,5 +1,6 @@
 import { ThemeProvider } from "@emotion/react";
 import React from "react";
+import ButtonAppBar from "./Navbar";
 import FormModal from "./Auth/FormModel";
 import { Button } from "@mui/material";
 
@@ -39,6 +40,7 @@ class Home extends React.Component {
   render() {
     return (
       <div>
+        <ButtonAppBar />
         <Button onClick={this.handleLogin}>Login</Button>
         <Button onClick={this.handleRegister}>Register</Button>
         <p className="lorem-text">

@@ -6,7 +6,7 @@ const initialState = {
     type: "",
   },
   loading: false,
-  user: null,
+  user: {},
   data: null,
   token: "",
 };

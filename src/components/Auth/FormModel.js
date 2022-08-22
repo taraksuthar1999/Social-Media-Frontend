@@ -65,7 +65,10 @@ export default function LoginModal(props) {
                 <ConnectedRegister login={props.login} />
               )}
               {props.state.login && (
-                <ConnectedLogin register={props.register} />
+                <ConnectedLogin
+                  register={props.register}
+                  handler={props.handler}
+                />
               )}
             </div>
           </div>
