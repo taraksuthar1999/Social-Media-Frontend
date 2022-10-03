@@ -1,31 +1,31 @@
-import logo from "./logo.svg";
+
 import "./App.css";
 
-import { Navigate, Route, Routes } from "react-router-dom";
-import { BrowserRouter as Router } from "react-router-dom";
 import React from "react";
-import Home from "./components/Home";
-import Loading from "./utils/Loading";
-import Layout from "./components/Layout";
-import RequireAuth from "./components/RequireAuth";
-import Welcome from "./components/Welcome";
+import Routes from "./routes";
+import ButtonAppBar from "./components/Navbar";
+import axios from "axios";
+
 
 class App extends React.Component {
   render() {
     return (
-      <div className="App">
-        <Router>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<Home />} />
-              <Route element={<RequireAuth />}>
-                <Route path="/welcome" element={<Welcome />} />
-              </Route>
-            </Route>
-          </Routes>
-        </Router>
-      </div>
+      <>
+        <ButtonAppBar/>
+        <Routes/>
+      </>
     );
   }
+}
+const setAuthToken =token=>{
+  if(token) axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
+  else delete axios.defaults.headers.common["Authorization"]
+}
+const token = document?.cookie
+?.split("; ")
+?.find((row) => row.startsWith("token="))
+?.split("=")[1];
+if (token) {
+  setAuthToken(token);
 }
 export default App;

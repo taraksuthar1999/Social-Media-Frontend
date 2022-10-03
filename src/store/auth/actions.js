@@ -22,12 +22,16 @@ const authReducer = createSlice({
     loginSuccess: (state, { payload }) => {
       state.loading = false;
       state.token = payload.data.data.token;
-      console.log(payload.data.data.token);
+      state.data = payload.data.data
+      state.error.message = ''
       Cookies.set(TOKEN, payload.data.data.token, { path: "/" });
+      console.log('success')
+      // history.push('/welcome')
     },
     loginFailed: (state, { payload }) => {
       state.loading = false;
       state.error.message = payload;
+      state.token = ""
     },
     register: (state, { payload }) => {
       state.loading = true;
@@ -35,6 +39,7 @@ const authReducer = createSlice({
     },
     registerSuccess: (state, { payload }) => {
       state.loading = false;
+      state.error.message = ''
     },
     registerFailed: (state, { payload }) => {
       state.loading = false;
@@ -42,6 +47,7 @@ const authReducer = createSlice({
     },
     resetError: (state) => {
       state.error.message = "";
+      state.loading = false
     },
     getProfile: (state, { payload }) => {
       state.loading = true;

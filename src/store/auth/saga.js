@@ -1,21 +1,24 @@
 import { takeEvery, call, put, take } from "redux-saga/effects";
-import { History } from "react-router-dom";
 import { actions } from "./actions";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 function* login({ payload }) {
   try {
-    console.log(payload);
+    const {email,password} = payload
     const response = yield call(async () => {
       return await axios
-        .post("http://localhost:3009/api/v1/auth/sign-in", payload)
+        .post("http://localhost:3009/api/v1/auth/login",{email,password})
         .then((res) => {
           console.log(res);
           return res;
         });
     });
     yield put(actions.loginSuccess(response));
+    payload.onLoginSuccess()
   } catch (error) {
-    yield put(actions.loginFailed(error?.response.data.message));
+    console.log(error)
+    yield put(actions.loginFailed(error?.response?.data?.message));
   }
 }
 function* register({ payload }) {

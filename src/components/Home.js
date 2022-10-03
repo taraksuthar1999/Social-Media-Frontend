@@ -39,10 +39,10 @@ class Home extends React.Component {
   }
   render() {
     return (
+        // <ButtonAppBar />
       <div>
-        <ButtonAppBar />
-        <Button onClick={this.handleLogin}>Login</Button>
-        <Button onClick={this.handleRegister}>Register</Button>
+        {/* <Button onClick={this.handleLogin}>Login</Button>
+        <Button onClick={this.handleRegister}>Register</Button> */}
         <p className="lorem-text">
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nulla iure
           voluptatibus, eligendi labore eveniet repudiandae, dolore, dolor modi
@@ -115,12 +115,7 @@ class Home extends React.Component {
           reprehenderit aliquam aspernatur iure similique quibusdam autem
           voluptatibus natus molestiae dicta maxime sint, iste temporibus.
         </p>
-        <FormModal
-          state={this.state}
-          login={this.handleLogin}
-          register={this.handleRegister}
-          handler={this.handleClose}
-        />
+
       </div>
     );
   }

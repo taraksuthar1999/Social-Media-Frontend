@@ -6,11 +6,14 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import FormModal from './Auth/FormModel'
 
 export default function ButtonAppBar() {
+
   return (
+    <>
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
           <IconButton
             size="large"
@@ -25,8 +28,16 @@ export default function ButtonAppBar() {
             News
           </Typography>
           <Button color="inherit">Login</Button>
+          <Button color="inherit">Register</Button>
         </Toolbar>
       </AppBar>
     </Box>
+            {/* <FormModal
+            state={this.state}
+            login={this.handleLogin}
+            register={this.handleRegister}
+            handler={this.handleClose}
+          /> */}
+    </>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
@@ -27,20 +27,23 @@ const Login = (props) => {
   const navigate = useNavigate();
 
   const onSubmit = async (formData) => {
-    props.login(formData);
-    console.log("cookie", document.cookie);
-    props.handler();
+    props.login({...formData,onLoginSuccess});
+
   };
+  const onLoginSuccess =()=>navigate('/welcome') 
   const formik = useFormik({
     initialValues: initFormData,
     validationSchema: validationSchema,
     enableReinitialize: true,
     onSubmit: (values) => onSubmit(values),
   });
-
+  
   const { handleChange, handleSubmit, values, errors, touched, handleBlur } =
-    formik;
-
+  formik;
+  
+  useEffect(()=>{
+    props.resetError()
+  },[values])
   return props.auth.loading ? (
     <Loading />
   ) : (
