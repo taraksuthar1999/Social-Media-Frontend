@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { Modal } from "@mui/material";
 import FocusTrap from "focus-trap-react";
 import ConnectedLogin from "./Login";
 import ConnectedRegister from "./Register";
 import { ClickAwayListener } from "@mui/material";
+import { ModalContext } from "../../context";
 
 const style = {
   position: "absolute",
@@ -18,23 +19,36 @@ const style = {
   p: 4,
 };
 
-export default function LoginModal(props) {
-  const [open, setOpen] = React.useState(props.state);
+export default function FromModal(props) {
+  const {login,register,isShown,setLogin,setIsShown,setRegister} = useContext(ModalContext)
   const ref = React.useRef(null);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
   const handleClickOutside = (e) => {
     if (ref.current && !ref.current.contains(e.target)) {
-      props.handler();
-      setOpen && setOpen(false);
+      closeHandler()
     }
   };
+  const closeHandler =()=>{
+    setIsShown(false)
+    setLogin(false)
+    setRegister(false)
+  }
+  const openRegister =()=>{
+    setRegister(true)
+    setLogin(false)
+    setIsShown(true)
+  }
+  const openLogin =()=>{
+    setRegister(false)
+    setLogin(true)
+    setIsShown(true)
+  }
+
 
   return (
     <div>
       <Modal
-        open={props.state.isShown}
-        onClose={props.handler}
+        open={isShown}
+        onClose={closeHandler}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -51,7 +65,7 @@ export default function LoginModal(props) {
               aria-label="Close Modal"
               aria-labelledby="close-modal"
               className="_modal-close"
-              onClick={props.handler}
+              onClick={closeHandler}
             >
               <span id="close-modal" className="_hide-visual">
                 Close
@@ -61,13 +75,12 @@ export default function LoginModal(props) {
               </svg>
             </button>
             <div className="modal-body">
-              {props.state.register && (
-                <ConnectedRegister login={props.login} />
+              {register && (
+                <ConnectedRegister login={openLogin} />
               )}
-              {props.state.login && (
+              {login && (
                 <ConnectedLogin
-                  register={props.register}
-                  handler={props.handler}
+                  register={openRegister}
                 />
               )}
             </div>

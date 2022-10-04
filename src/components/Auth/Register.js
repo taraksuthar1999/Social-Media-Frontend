@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
@@ -7,6 +7,7 @@ import { Button, Grid, Link, TextField, Typography } from "@mui/material";
 import { Alert } from "@mui/material";
 import { Box } from "@mui/system";
 import { actions } from "../../store/auth/actions";
+import { ModalContext } from "../../context";
 
 const initialState = {
   userName: "",
@@ -32,11 +33,19 @@ const validationSchema = Yup.object({
 
 const Register = (props) => {
   const [initFormData] = useState(initialState);
+  const {setLogin,setRegister,setIsShown} = useContext(ModalContext)
   const navigate = useNavigate();
+
+  const onRegisterSuccess =()=>{
+    setLogin(true)
+    setRegister(false)
+    setIsShown(true)
+    navigate('/')
+  } 
 
   const onSubmit = (formData) => {
     delete formData.passwordConfirmation;
-    props.register(formData);
+    props.register({...formData,onRegisterSuccess});
   };
   const formik = useFormik({
     initialValues: initFormData,

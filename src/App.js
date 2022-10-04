@@ -3,7 +3,7 @@ import "./App.css";
 
 import React from "react";
 import Routes from "./routes";
-import ButtonAppBar from "./components/Navbar";
+import Navbar from "./components/Navbar";
 import axios from "axios";
 
 
@@ -11,8 +11,8 @@ class App extends React.Component {
   render() {
     return (
       <>
-        <ButtonAppBar/>
-        <Routes/>
+          <Navbar/>
+          <Routes/>
       </>
     );
   }

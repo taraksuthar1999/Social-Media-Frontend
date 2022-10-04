@@ -10,6 +10,7 @@ import "./index.css";
 import store from "./store";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { ModalProvider } from "./context";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 // class App extends React.Component {
 //   constructor(props) {
@@ -46,8 +47,10 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 // const ConnectedApp = connect((state) => state, { login })(App);
 root.render(
   <Provider store={store}>
-    <React.StrictMode>
+    <React.StrictMode> 
+      <ModalProvider>
         <App />
+      </ModalProvider>
     </React.StrictMode>
   </Provider>
 );

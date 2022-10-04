@@ -23,16 +23,17 @@ function* login({ payload }) {
 }
 function* register({ payload }) {
   try {
-    console.log(payload);
+    const {userName,email,password} = payload;
     const response = yield call(async () => {
       return await axios
-        .post("http://localhost:3009/api/v1/auth/register", payload)
+        .post("http://localhost:3009/api/v1/auth/register", {userName,email,password})
         .then((res) => {
           console.log(res);
           return res;
         });
     });
     yield put(actions.registerSuccess(response));
+    payload.onRegisterSuccess()
   } catch (error) {
     yield put(actions.registerFailed(error?.response.data.message));
   }

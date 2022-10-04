@@ -26,11 +26,10 @@ const Login = (props) => {
   const [initFormData] = useState(initialState);
   const navigate = useNavigate();
 
+  const onLoginSuccess =()=>navigate('/welcome') 
   const onSubmit = async (formData) => {
     props.login({...formData,onLoginSuccess});
-
   };
-  const onLoginSuccess =()=>navigate('/welcome') 
   const formik = useFormik({
     initialValues: initFormData,
     validationSchema: validationSchema,
