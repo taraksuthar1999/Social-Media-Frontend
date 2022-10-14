@@ -59,11 +59,6 @@ const Register = (props) => {
 
   return (
     <Box width="65%" height="350px" ml="auto" mr="auto" mt="auto" mb="auto">
-      {/* <Box sx={{ minHeight: "50px", mb: 2 }}>
-        {props.auth.error?.message ? (
-          <Alert severity="error">{props.auth.error?.message}</Alert>
-        ) : null}
-      </Box> */}
       <FormikProvider value={formik}>
         <Form onSubmit={handleSubmit}>
           <Grid
