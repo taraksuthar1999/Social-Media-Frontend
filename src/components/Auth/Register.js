@@ -58,12 +58,12 @@ const Register = (props) => {
     formik;
 
   return (
-    <Box width="60%" height="550px" ml="auto" mr="auto">
-      <Box sx={{ minHeight: "50px", mb: 2 }}>
+    <Box width="65%" height="350px" ml="auto" mr="auto" mt="auto" mb="auto">
+      {/* <Box sx={{ minHeight: "50px", mb: 2 }}>
         {props.auth.error?.message ? (
           <Alert severity="error">{props.auth.error?.message}</Alert>
         ) : null}
-      </Box>
+      </Box> */}
       <FormikProvider value={formik}>
         <Form onSubmit={handleSubmit}>
           <Grid
@@ -75,7 +75,7 @@ const Register = (props) => {
             justifyContent="center"
             display="block"
           >
-            <Grid mb={5} item>
+            <Grid mb={3} item>
               <TextField
                 fullWidth
                 variant="standard"
@@ -90,7 +90,7 @@ const Register = (props) => {
                 }
               />
             </Grid>
-            <Grid mb={5} item>
+            <Grid mb={3} item>
               <TextField
                 fullWidth
                 variant="standard"
@@ -103,7 +103,7 @@ const Register = (props) => {
                 helperText={errors.email && touched.email ? errors.email : null}
               />
             </Grid>
-            <Grid item mb={5}>
+            <Grid item mb={3}>
               <TextField
                 fullWidth
                 variant="standard"
@@ -119,7 +119,7 @@ const Register = (props) => {
                 }
               />
             </Grid>
-            <Grid item mb={5}>
+            <Grid item mb={3}>
               <TextField
                 fullWidth
                 variant="standard"
@@ -139,7 +139,7 @@ const Register = (props) => {
                 }
               />
             </Grid>
-            <Grid item mb={5}>
+            <Grid item mb={3}>
               <Button
                 variant="contained"
                 sx={{
@@ -155,6 +155,9 @@ const Register = (props) => {
               >
                 Register
               </Button>
+              {props.auth.error?.message ? (
+                 <span className="msg alert">{props.auth.error?.message}</span>
+        ) : null}
             </Grid>
             <Grid item>
               <span>New to App?</span>&nbsp;

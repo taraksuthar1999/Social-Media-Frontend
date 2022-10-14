@@ -1,21 +1,21 @@
 
 import "./App.css";
 
-import React from "react";
+import React, { useEffect,useState } from "react";
 import Routes from "./routes";
 import Navbar from "./components/Navbar";
 import axios from "axios";
 
 
-class App extends React.Component {
-  render() {
+function App(props){
+
     return (
       <>
           <Navbar/>
           <Routes/>
       </>
     );
-  }
+
 }
 const setAuthToken =token=>{
   if(token) axios.defaults.headers.common["Authorization"] = `Bearer ${token}`

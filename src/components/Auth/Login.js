@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { connect, useDispatch } from "react-redux";
+import React, { useContext, useEffect, useState } from "react";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { useFormik, FormikProvider, Form } from "formik";
@@ -8,6 +8,7 @@ import { Alert } from "@mui/material";
 import { Box } from "@mui/system";
 import { actions } from "../../store/auth/actions";
 import Loading from "../../utils/Loading";
+import { ModalContext } from "../../context";
 
 const initialState = {
   email: "",
@@ -24,9 +25,13 @@ const validationSchema = Yup.object({
 
 const Login = (props) => {
   const [initFormData] = useState(initialState);
+  const {setIsShown} = React.useContext(ModalContext)
   const navigate = useNavigate();
 
-  const onLoginSuccess =()=>navigate('/welcome') 
+  const onLoginSuccess =()=>{
+    setIsShown(false)
+    navigate('/')
+  } 
   const onSubmit = async (formData) => {
     props.login({...formData,onLoginSuccess});
   };
@@ -40,18 +45,11 @@ const Login = (props) => {
   const { handleChange, handleSubmit, values, errors, touched, handleBlur } =
   formik;
   
-  useEffect(()=>{
-    props.resetError()
-  },[values])
+
   return props.auth.loading ? (
     <Loading />
   ) : (
-    <Box width="60%" height="350px" ml="auto" mr="auto">
-      <Box sx={{ minHeight: "50px", mb: 2 }}>
-        {props.auth.error?.message ? (
-          <Alert severity="error">{props.auth.error?.message}</Alert>
-        ) : null}
-      </Box>
+    <Box width="65%" height="250px" ml="auto" mr="auto" mt="auto" mb="auto">
       <FormikProvider value={formik}>
         <Form onSubmit={handleSubmit}>
           <Grid
@@ -63,7 +61,7 @@ const Login = (props) => {
             justifyContent="center"
             display="block"
           >
-            <Grid mb={5} item>
+            <Grid mb={3} item>
               <TextField
                 fullWidth
                 variant="standard"
@@ -76,7 +74,7 @@ const Login = (props) => {
                 helperText={errors.email && touched.email ? errors.email : null}
               />
             </Grid>
-            <Grid item mb={5}>
+            <Grid item mb={3}>
               <TextField
                 fullWidth
                 variant="standard"
@@ -92,7 +90,7 @@ const Login = (props) => {
                 }
               />
             </Grid>
-            <Grid item mb={5}>
+            <Grid item mb={3}>
               <Button
                 variant="contained"
                 sx={{
@@ -108,6 +106,10 @@ const Login = (props) => {
               >
                 Login
               </Button>
+              {props.auth.error?.message ? (
+                 <span className="msg alert">{props.auth.error?.message}</span>
+        ) : null}
+             
             </Grid>
             <Grid item>
               <span>New to App?</span>&nbsp;

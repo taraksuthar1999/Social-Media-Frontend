@@ -4,22 +4,6 @@ export const ModalProvider = ({children})=>{
     const [isShown,setIsShown] = React.useState(false)
     const [login,setLogin] = React.useState(false)
     const [register,setRegister] = React.useState(false)
-    const openLogin=()=>{
-        console.log('hello')
-        // setIsShown(true)
-        // setLogin(!login)
-        // setRegister(false)
-    }
-    const openRegister=()=>{
-        setIsShown(true)
-        setRegister(!register)
-        setLogin(false)
-    }
-    const closeModal = ()=>{
-        setRegister(false)
-        setLogin(false)
-        setIsShown(false)
-    }
     return(
         <ModalContext.Provider value={{isShown,login,register,setIsShown,setLogin,setRegister}}>
             {children}

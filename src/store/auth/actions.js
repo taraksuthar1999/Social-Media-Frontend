@@ -6,9 +6,9 @@ const initialState = {
     type: "",
   },
   loading: false,
-  user: {},
+  user: null,
   data: null,
-  token: "",
+  token: null,
 };
 const TOKEN = "token";
 const authReducer = createSlice({
@@ -25,7 +25,6 @@ const authReducer = createSlice({
       state.data = payload.data.data
       state.error.message = ''
       Cookies.set(TOKEN, payload.data.data.token, { path: "/" });
-      console.log('success')
       // history.push('/welcome')
     },
     loginFailed: (state, { payload }) => {

@@ -7,7 +7,6 @@ import Home from "./Home";
 import Welcome from "./Welcome";
 const RequireAuth = () => {
   let token = '';
-  console.log()
   function hasJWT(){
     return document?.cookie
     ?.split("; ")
