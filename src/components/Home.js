@@ -7,39 +7,14 @@ import { Button } from "@mui/material";
 class Home extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isShown: props?.login || props?.register || false,
-      login: props?.login || false,
-      register: props?.register || false,
-    };
-    this.handleClose = this.handleClose.bind(this);
-    this.handleLogin = this.handleLogin.bind(this);
-    this.handleRegister = this.handleRegister.bind(this);
   }
-  handleLogin() {
 
-    this.setState({
-      isShown: true,
-      login: true,
-      register: false,
-    });
-  }
-  handleRegister() {
-    this.setState({
-      isShown: true,
-      register: true,
-      login: false,
-    });
-  }
-  handleClose() {
-    this.setState({
-      isShown: false,
-      register: false,
-      login: false,
-    });
-  }
   render() {
     return (
+      <>
+      <div className="sidebar"></div>
+      <div className="content">
+
       <div>
         <p className="lorem-text">
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nulla iure
@@ -115,6 +90,10 @@ class Home extends React.Component {
         </p>
         <FormModal/>
       </div>
+      </div>
+      <div className="suggestions"></div>
+      </>
+      
     );
   }
 }

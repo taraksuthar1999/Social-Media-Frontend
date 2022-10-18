@@ -5,7 +5,7 @@ import RequireAuth from "../components/RequireAuth";
 import Welcome from "../components/Welcome";
 function Routing(){
   return(
-    <div className="App">
+    <div className="container">
       <Router>
         <Routes>
           <Route path="/" element={<Layout />}>

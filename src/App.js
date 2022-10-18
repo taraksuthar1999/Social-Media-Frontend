@@ -13,7 +13,7 @@ function App(props){
       <>
           <Navbar/>
           <Routes/>
-      </>
+      </> 
     );
 
 }
