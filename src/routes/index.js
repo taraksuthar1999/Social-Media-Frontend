@@ -1,6 +1,7 @@
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 import Home from "../components/Home";
 import Layout from "../components/Layout";
+import { PostList } from "../components/Post/PostList";
 import RequireAuth from "../components/RequireAuth";
 import Welcome from "../components/Welcome";
 function Routing(){
@@ -10,6 +11,7 @@ function Routing(){
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
+            <Route path='/posts' element={<PostList/>} />
             <Route element={<RequireAuth />}>
               <Route path="/welcome" element={<Welcome />} />
             </Route>

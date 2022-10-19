@@ -10,4 +10,7 @@ export const ModalProvider = ({children})=>{
         </ModalContext.Provider>
     )
 }
-
+export const PostContext = React.createContext()
+export function PostProvider({children}){
+    return <PostContext.Provider value={{}}>{children}</PostContext.Provider>
+}

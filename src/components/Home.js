@@ -3,6 +3,7 @@ import React from "react";
 import ButtonAppBar from "./Navbar";
 import FormModal from "./Auth/FormModel";
 import { Button } from "@mui/material";
+import SideBar from "./SideBar";
 
 class Home extends React.Component {
   constructor(props) {
@@ -12,7 +13,9 @@ class Home extends React.Component {
   render() {
     return (
       <>
-      <div className="sidebar"></div>
+      <div className="sidebar">
+        <SideBar/>
+      </div>
       <div className="content">
 
       <div>
@@ -91,7 +94,7 @@ class Home extends React.Component {
         <FormModal/>
       </div>
       </div>
-      <div className="suggestions"></div>
+      {/* <div className="suggestions"></div> */}
       </>
       
     );
