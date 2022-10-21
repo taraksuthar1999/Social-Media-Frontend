@@ -4,21 +4,25 @@ import ButtonAppBar from "./Navbar";
 import FormModal from "./Auth/FormModel";
 import { Button } from "@mui/material";
 import SideBar from "./SideBar";
+import RecipeReviewCard from "./Post/Post";
+import {useMediaQuery} from "@mui/material";
 
-class Home extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+function Home(props){
 
-  render() {
+   const min500 = useMediaQuery("(min-width:500px)")
+
     return (
       <>
-      <div className="sidebar">
+      {min500&&<div className="sidebar">
         <SideBar/>
-      </div>
+      </div>}
       <div className="content">
-
-      <div>
+        <RecipeReviewCard/>
+        <RecipeReviewCard/>
+        <RecipeReviewCard/>
+        <RecipeReviewCard/>
+        <RecipeReviewCard/>
+      {/* <div>
         <p className="lorem-text">
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nulla iure
           voluptatibus, eligendi labore eveniet repudiandae, dolore, dolor modi
@@ -91,14 +95,14 @@ class Home extends React.Component {
           reprehenderit aliquam aspernatur iure similique quibusdam autem
           voluptatibus natus molestiae dicta maxime sint, iste temporibus.
         </p>
-        <FormModal/>
-      </div>
+      </div> */}
+      <FormModal/>
       </div>
       {/* <div className="suggestions"></div> */}
       </>
       
     );
-  }
+  
 }
 
 export default Home;

@@ -12,10 +12,11 @@ import Typography from "@mui/material/Typography";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 
 export default function RecipeReviewCard() {
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 400,boxShadow:0,borderRadius:0,borderTop:1,borderBottom:1 }}>
       <CardHeader title="Shrimp and Chorizo Paella" />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
@@ -32,7 +33,7 @@ export default function RecipeReviewCard() {
           <ThumbUpOffAltIcon />
         </IconButton>
         <IconButton sx={{ marginLeft: "auto" }} aria-label="share">
-          <ChatBubbleIcon />
+          <ChatBubbleOutlineIcon />
         </IconButton>
       </CardActions>
     </Card>
