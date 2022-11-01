@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from "react"; 
 import { useEffect,useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -14,12 +14,20 @@ import { useSelect } from "@mui/base";
 import Button from "@mui/material/Button";
 import { width } from "@mui/system";
 import { useMediaQuery } from "@mui/material";
+import NavbarButtons from "./NavbarButtons";
+import NavbarProfile from "./NavbarProfile";
+import SideBar from "./SideBar";
 
 
 
 export default function Navbar(){
-    const {setIsShown,setLogin,setRegister,isShown} = React.useContext(ModalContext)
+    const {setIsShown,setLogin,setRegister,isShown} = React.useContext(ModalContext)  
+    const [mobileOpen, setMobileOpen] = React.useState(false);
     const userState = useSelector(state=>state.auth.data) ?? null
+
+    const handleDrawerToggle = () => {
+      setMobileOpen(!mobileOpen);
+    };
     const token = useSelector(state=>state.auth.token) ?? document?.cookie
     ?.split("; ")
     ?.find((row) => row.startsWith("token="))
@@ -29,7 +37,8 @@ export default function Navbar(){
         //api call
       }
     })
-    const min500 = useMediaQuery("(min-width:500px)")
+    const min600 = useMediaQuery("(min-width:600px)")
+    const max600 = useMediaQuery("(max-width:600px)")
     const loginHandler=()=>{
       setIsShown(true)
       setLogin(true)
@@ -47,29 +56,27 @@ export default function Navbar(){
     return (
       <>
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="fixed" sx={{backgroundColor:"white",color:"black",boxShadow:0,borderBottom:1}}>
+        <AppBar position="fixed" sx={{height:"calc(100vh-70px)", backgroundColor:"white",color:"black",boxShadow:0,borderBottom:1,zIndex: (theme) => theme.zIndex.drawer + 1}}>
           <Toolbar>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { sm: 'none' } }}
+          >
+            <MenuIcon />
+          </IconButton>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               NTSocial
             </Typography>
-           {token?<Button color="inherit">Logout</Button>:min500&&<Box sx={{height:"30px",width:"150px"}} display="flex" justifyContent="space-between"> 
-            <Button sx={{backgroundColor:"black",boxShadow:0,color:"white",fontWeight:"bold",borderRadius:0}} onClick={loginHandler}>LOG IN</Button>
-            <Button sx={{backgroundColor:"red",boxShadow:0,color:"white",fontWeight:"bold",borderRadius:0}} onClick={registerHandler}>SIGN UP</Button></Box>}
+           {min600&&(token?<NavbarProfile/>:<NavbarButtons/>)  }
           </Toolbar>
         </AppBar>
       </Box>
-
+      <SideBar token={token} mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle}/>
     </>
-    );
+    );  
 
   
 }

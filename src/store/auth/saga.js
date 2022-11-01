@@ -2,6 +2,7 @@ import { takeEvery, call, put, take } from "redux-saga/effects";
 import { actions } from "./actions";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 function* login({ payload }) {
   try {
@@ -10,7 +11,6 @@ function* login({ payload }) {
       return await axios
         .post("http://localhost:3009/api/v1/auth/login",{email,password})
         .then((res) => {
-          console.log(res);
           return res;
         });
     });
@@ -38,6 +38,21 @@ function* register({ payload }) {
     yield put(actions.registerFailed(error?.response.data.message));
   }
 }
+function* logout({ payload }) {
+  try {
+    const response = yield call(async () => {
+      return await axios
+        .get("http://localhost:3009/api/v1/auth/logout")
+        .then((res) => {
+          return res;
+        });
+    });
+    yield put(actions.logoutSuccess({}));
+    payload.onLogoutSuccess()
+  } catch (error) {
+    console.log(error)
+  }
+}
 function* getProfile({ payload }) {
   console.log("getProfile", payload);
 }
@@ -45,4 +60,5 @@ export function* authSaga() {
   yield takeEvery(actions.login, login);
   yield takeEvery(actions.getProfile, getProfile);
   yield takeEvery(actions.register, register);
+  yield takeEvery(actions.logout, logout);
 }

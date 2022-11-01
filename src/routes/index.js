@@ -5,23 +5,24 @@ import RecipeReviewCard from "../components/Post/Post";
 import { PostList } from "../components/Post/PostList";
 import RequireAuth from "../components/RequireAuth";
 import Welcome from "../components/Welcome";
+import { Box } from "@mui/material";
+const drawerWidth = 240;
+
+
 function Routing(){
   return(
-    <div className="container">
-      <Router>
+      // <Router>
+    <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop:{xs:"57px",sm:"65px"}}}>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
-            <Route path='/posts' element={<PostList/>} />
-            <Route path='/post' element={<RecipeReviewCard/>} />
             <Route element={<RequireAuth />}>
               <Route path="/welcome" element={<Welcome />} />
             </Route>
-            <Route path="/tarak" element={ <><h1>Tarak</h1></>}/>
           </Route>
         </Routes>
-      </Router>
-    </div>
+    </Box>
+      // </Router>
   );
 }
 export default Routing

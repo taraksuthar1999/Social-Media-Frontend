@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
+import { setAuthToken } from "../../App";
 const initialState = {
   error: {
     message: "",
@@ -25,7 +26,7 @@ const authReducer = createSlice({
       state.data = payload.data.data
       state.error.message = ''
       Cookies.set(TOKEN, payload.data.data.token, { path: "/" });
-      // history.push('/welcome')
+      setAuthToken(payload.data.data.token)
     },
     loginFailed: (state, { payload }) => {
       state.loading = false;
@@ -50,6 +51,17 @@ const authReducer = createSlice({
     },
     getProfile: (state, { payload }) => {
       state.loading = true;
+    },
+    logout:(state,{payload})=>{
+        state.loading = true;
+        state.data = payload;
+    },
+    logoutSuccess: (state, { payload }) => {
+      state.loading = false;
+      state.token = null;
+      state.data = null;
+      state.error.message = ''
+      Cookies.remove('token');
     },
   },
 });

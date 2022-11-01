@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Outlet, useLocation, Navigate, useNavigate } from "react-router-dom";
@@ -8,10 +9,7 @@ import Welcome from "./Welcome";
 const RequireAuth = () => {
   let token = '';
   function hasJWT(){
-    return document?.cookie
-    ?.split("; ")
-    ?.find((row) => row.startsWith("token="))
-    ?.split("=")[1];
+    return Cookies.get('token');
   }
   return hasJWT()||false ? <Outlet /> : <Navigate to={"/"} />;
 };

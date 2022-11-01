@@ -123,7 +123,7 @@ const Register = (props) => {
                 type="password"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.passwordConfirmation}
+                value={values.passwordConfirmation || ''}
                 error={
                   errors.passwordConfirmation && touched.passwordConfirmation
                 }

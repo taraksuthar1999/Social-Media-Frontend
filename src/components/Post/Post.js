@@ -16,7 +16,7 @@ import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 
 export default function RecipeReviewCard() {
   return (
-    <Card sx={{ maxWidth: 400,boxShadow:0,borderRadius:0,borderTop:1,borderBottom:1 }}>
+    <Card sx={{ maxWidth: 600,boxShadow:0,borderRadius:0,borderTop:1,borderBottom:1 }}>
       <CardHeader title="Shrimp and Chorizo Paella" />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
@@ -32,7 +32,7 @@ export default function RecipeReviewCard() {
         <IconButton aria-label="share">
           <ThumbUpOffAltIcon />
         </IconButton>
-        <IconButton sx={{ marginLeft: "auto" }} aria-label="share">
+        <IconButton  sx={{ marginLeft: "auto" }} aria-label="share">
           <ChatBubbleOutlineIcon />
         </IconButton>
       </CardActions>

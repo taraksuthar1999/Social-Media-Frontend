@@ -30,7 +30,7 @@ const Login = (props) => {
 
   const onLoginSuccess =()=>{
     setIsShown(false)
-    navigate('/')
+    navigate('/welcome')
   } 
   const onSubmit = async (formData) => {
     props.login({...formData,onLoginSuccess});

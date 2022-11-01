@@ -9,14 +9,13 @@ import {useMediaQuery} from "@mui/material";
 
 function Home(props){
 
-   const min500 = useMediaQuery("(min-width:500px)")
+   const min600 = useMediaQuery("(min-width:600px)")
 
     return (
       <>
-      {min500&&<div className="sidebar">
-        <SideBar/>
-      </div>}
-      <div className="content">
+      {/* {min600&&<SideBar/>} */}
+      {/* </div>} */}
+      {/* <div className="content"> */}
         <RecipeReviewCard/>
         <RecipeReviewCard/>
         <RecipeReviewCard/>
@@ -97,7 +96,7 @@ function Home(props){
         </p>
       </div> */}
       <FormModal/>
-      </div>
+      {/* </div> */}
       {/* <div className="suggestions"></div> */}
       </>
       
