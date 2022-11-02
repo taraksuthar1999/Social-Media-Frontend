@@ -72,7 +72,7 @@ export default function SideBar(props){
     return(
     <Box
         component="nav"
-        sx={{ marginTop:"65px",width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+        sx={{ marginTop:"65px",width: { md: drawerWidth }, flexShrink: { sm: 0 } }}
         aria-label="mailbox folders"
       >
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
@@ -85,7 +85,7 @@ export default function SideBar(props){
             keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
-            display: { xs: 'block', sm: 'none' },
+            display: { xs: 'block', md: 'none' },
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
         >
@@ -94,7 +94,7 @@ export default function SideBar(props){
         <Drawer
           variant="permanent"
           sx={{
-            display: { xs: 'none', sm: 'block' },
+            display: { xs: 'none', md: 'block' },
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
           open

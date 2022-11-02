@@ -1,17 +1,24 @@
-export const getPost=async()=>{
-    return new Promise((resolve,reject)=>{
-        setTimeout(()=>{
-          resolve([{
-            id:1,
-            title:"I don't wanna work in corporate anymore",
-            body:"I don't want to work in corporate anymore. I don't want to have a manager or go through performance reviews or put up with office politics. I'm sick of watching immensely talented people wasting their talent on idiotic products. I'm sick of stupid people speaking over everyone only to show off and feed their tiny egos. I don't care about prestige or none of that shit. I just wanna do something that makes sense and earn enough money to sustain my lifestyle (nothing very luxurious). I just don't know what that could be. Any ideas/advice?",
-            createdAt:new Date().toISOString()
-          },{
-            id:2,
-            title:'Where to live with 500k',
-            body:"Hi Blind friends,Where would you live in the US if you are",
-            createdAt:new Date().toISOString()
-          }])  
-        },1000)
-    })
+const { faker } = require('@faker-js/faker');
+
+
+module.exports ={
+  getPosts:function(){
+    let posts = []
+    for(let i =0;i<30;i++){
+      let newPost = {
+        id:faker.datatype.uuid(),
+        tag:faker.word.verb(),
+        title:faker.lorem.sentence(),
+        body:faker.lorem.paragraphs(4, '<br/>\n'),
+        company:faker.company.name(),
+        createdAt:faker.date.recent(),
+        reads:faker.datatype.number(9999),
+        likes:faker.datatype.number(999),
+        comments:faker.datatype.number(99),
+        userName:faker.name.firstName()
+      }
+      posts.push(newPost)
+    }
+    return posts
   }
+}
