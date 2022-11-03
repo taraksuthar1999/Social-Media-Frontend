@@ -29,7 +29,7 @@ function Home(props){
             </Grid>)
           } 
         </Grid>
-      <FormModal/>
+        {/* <FormModal/> */}
       </Box>
       
     );

@@ -55,8 +55,8 @@ export default function Navbar(){
 
     return (
       <>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="fixed" sx={{height:"calc(100vh-70px)", backgroundColor:"white",color:"black",boxShadow:0,borderBottom:1,zIndex: (theme) => theme.zIndex.drawer + 1}}>
+      
+        <AppBar position="fixed" sx={{height:"calc(100vh-70px)", backgroundColor:"white",color:"black",boxShadow:0,borderBottom:"1px solid rgba(0, 0, 0, 0.12)",zIndex: (theme) => theme.zIndex.drawer + 1}}>
           <Toolbar>
           <IconButton
             color="inherit"
@@ -67,13 +67,13 @@ export default function Navbar(){
           >
             <MenuIcon />
           </IconButton>
+          <img src="" />
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               NTSocial
             </Typography>
            {min600&&(token?<NavbarProfile/>:<NavbarButtons/>)  }
           </Toolbar>
         </AppBar>
-      </Box>
       <SideBar token={token} mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle}/>
     </>
     );  

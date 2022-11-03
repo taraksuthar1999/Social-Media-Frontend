@@ -8,6 +8,7 @@ import axios from "axios";
 import { Box } from "@mui/material";
 import { BrowserRouter as Router } from "react-router-dom";
 import Cookies from "js-cookie";
+import FromModal from "./components/Auth/FormModel";
 
 
 
@@ -18,6 +19,7 @@ function App(props){
         <Router>
           <Navbar/>
           <Routes/>
+          <FromModal/>
         </Router>
       </Box> 
     );
