@@ -40,7 +40,7 @@ export default function SideBar(props){
             </Box>
             <Divider />
           <List>
-                {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+                {['Tech', 'Sports', 'Finance', 'Properties'].map((text, index) => (
               <ListItem key={text} disablePadding>
                 <ListItemButton>
                   <ListItemText primary={text} />

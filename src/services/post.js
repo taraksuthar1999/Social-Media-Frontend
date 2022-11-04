@@ -19,6 +19,30 @@ const getPosts = function(){
   return posts
 }
 const getPost = function(id){
+  let commentList = []
+  for(let i=0;i<4;i++){
+    let newComment = {
+      message:faker.lorem.sentence(),
+      createdAt:faker.date.recent(),
+      userName:faker.name.firstName(),
+      company:faker.company.name(),
+      likes:faker.datatype.number(999),
+      parentId:null,
+      id:faker.datatype.uuid(),
+      postId:faker.datatype.uuid()
+    }
+    commentList.push(newComment)
+  }
+  commentList.push({
+    message:faker.lorem.sentence(),
+      createdAt:faker.date.recent(),
+      userName:faker.name.firstName(),
+      company:faker.company.name(),
+      likes:faker.datatype.number(999),
+      parentId:commentList[0].id,
+      id:faker.datatype.uuid(),
+      postId:null
+  })
   return {
     id:faker.datatype.uuid(),
     tag:faker.word.verb(),
@@ -28,8 +52,9 @@ const getPost = function(id){
     createdAt:faker.date.recent(),
     reads:faker.datatype.number(9999),
     likes:faker.datatype.number(999),
-    comments:faker.datatype.number(99),
-    userName:faker.name.firstName()
+    comments:commentList,
+    commentCount:faker.datatype.number(9),
+    userName:faker.name.firstName()    
   }
 }
 

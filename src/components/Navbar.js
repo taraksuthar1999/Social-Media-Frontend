@@ -17,6 +17,7 @@ import { useMediaQuery } from "@mui/material";
 import NavbarButtons from "./NavbarButtons";
 import NavbarProfile from "./NavbarProfile";
 import SideBar from "./SideBar";
+import logo from "../images/NOT SOCIAL.png"
 
 
 
@@ -67,9 +68,8 @@ export default function Navbar(){
           >
             <MenuIcon />
           </IconButton>
-          <img src="" />
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              NTSocial
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1,marginTop:'10px' }}>
+              <img src={logo} className="logo"/>
             </Typography>
            {min600&&(token?<NavbarProfile/>:<NavbarButtons/>)  }
           </Toolbar>
