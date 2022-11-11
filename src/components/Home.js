@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import Post from "./Post/Post";
 import {useMediaQuery} from "@mui/material";
 import post, { getPosts } from "../services/post";
+import { SocketProvider } from "../context";
 
 function Home(props){
 
@@ -22,6 +23,7 @@ function Home(props){
    },[])
 
     return (
+      <SocketProvider>
       <Box>
         <Grid container sx={{borderLeft:"1px solid rgba(0, 0, 0, 0.12)",borderTop:"1px solid rgba(0, 0, 0, 0.12)"}}>
           {posts.map((post)=><Grid item key={post.id}  sm={6} md={6} sx={{borderBottom:"1px solid rgba(0, 0, 0, 0.12)",borderRight:"1px solid rgba(0, 0, 0, 0.12)"}}>
@@ -31,6 +33,7 @@ function Home(props){
         </Grid>
         {/* <FormModal/> */}
       </Box>
+    </SocketProvider>
       
     );
   

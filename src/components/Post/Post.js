@@ -18,8 +18,19 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { Box } from "@mui/system";
 import { fontSize } from "@mui/system";
 import { Divider } from "@mui/material";
+import io from 'socket.io-client'
+import { useEffect } from "react";
+import { resolveTo } from "@remix-run/router";
+import { SocketContext } from "../../context";
 
 export default function Post({data}) {
+  const {socket} = React.useContext(SocketContext);
+   
+  function likeHandler(postId){
+      socket.emit('like',"636e0b59c7b6f19eab8cb58b",(res)=>{
+        console.log(res)
+      })
+  }
   return (
     <Card sx={{ maxWidth:'sm',boxShadow:0,borderRadius:0,padding:'15px'}}>
       <Box>
@@ -48,7 +59,7 @@ export default function Post({data}) {
           <IconButton aria-label="read">
             <VisibilityIcon sx={{color:'black'}} fontSize="small" /><Typography color='text.primary' sx={{fontSize:"0.5em"}}>{data.reads}</Typography>
           </IconButton>
-          <IconButton aria-label="like">
+          <IconButton aria-label="like" onClick={()=>likeHandler(data.id)}>
             <ThumbUpOffAltIcon sx={{color:'black'}} fontSize="small" /><Typography color='text.primary' sx={{fontSize:"0.5em"}}>{data.likes}</Typography>
           </IconButton>
           <IconButton aria-label="comment">

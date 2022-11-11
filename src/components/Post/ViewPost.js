@@ -3,7 +3,7 @@ import { Box } from "@mui/system";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import Link from '@mui/joy/Link';
-import { Divider, Grid } from "@mui/material";
+import { Button, Divider, Grid, TextField } from "@mui/material";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -51,7 +51,11 @@ export default function ViewPost(){
                             </Card>
                         </Box>
                         <Box sx={{ maxWidth:'sm',margin:'25px auto',border:"1px solid rgba(0, 0, 0, 0.12)",padding:"15px"}}>
-                            <Typography>Add Comment</Typography>
+                            {/* <Link><Typography>Add Comment</Typography></Link> */}
+                           <Box display={"flex"}>
+                            <TextField placeholder="Comment" fullWidth />
+                            <Button>Post</Button>
+                           </Box>
                         </Box>
                         <Box sx={{ maxWidth:'sm',margin:'25px auto',border:"1px solid rgba(0, 0, 0, 0.12)"}}>
                             <Box sx={{padding:"15px",fontSize:"0.5em"}}>
