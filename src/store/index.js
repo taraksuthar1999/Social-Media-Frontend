@@ -6,22 +6,19 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import { logger } from "redux-logger";
 import createSagaMiddleware from "redux-saga";
 import authReducer from "./auth/actions.js";
+import rootReducer from "./reducer"
+import rootSaga from "./saga.js";
 import { authSaga } from "./auth/saga";
 let sagaMiddleware = createSagaMiddleware();
-const createRootReducer = combineReducers({
-  auth:authReducer
-})
+// const createRootReducer = combineReducers({
+//   auth:authReducer
+// })
 const store = configureStore({
-  reducer: {
-    auth: authReducer,
-  },
+  reducer:rootReducer,
   middleware: [
-    ...getDefaultMiddleware({ thunk: false, serializableCheck: false }).concat(
-      logger
-    ),
     sagaMiddleware,
   ],
 });
 //  const store = createStore(connectRouter(history)(createRootReducer),composeWithDevTools(applyMiddleware(sagaMiddleware,routerMiddleware(history),logger)))
-sagaMiddleware.run(authSaga);
+sagaMiddleware.run(rootSaga);
 export default store;

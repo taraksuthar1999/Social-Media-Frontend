@@ -5,50 +5,24 @@ import FocusTrap from "focus-trap-react";
 import ConnectedLogin from "./Login";
 import ConnectedRegister from "./Register";
 import { ClickAwayListener } from "@mui/material";
-import { ModalContext } from "../../context";
+import { ModalContext } from "../../contexts/context";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
 
 export default function FromModal(props) {
-  const {login,register,isShown,setLogin,setIsShown,setRegister} = useContext(ModalContext)
+  const {login,register,isShown,close} = useContext(ModalContext)
   const ref = React.useRef(null);
   const handleClickOutside = (e) => {
     if (ref.current && !ref.current.contains(e.target)) {
-      closeHandler()
+      close()
     }
   };
-  const closeHandler =()=>{
-    setIsShown(false)
-    setLogin(false)
-    setRegister(false)
-  }
-  const openRegister =()=>{
-    setRegister(true)
-    setLogin(false)
-    setIsShown(true)
-  }
-  const openLogin =()=>{
-    setRegister(false)
-    setLogin(true)
-    setIsShown(true)
-  }
 
 
   return (
     <div>
       <Modal
         open={isShown}
-        onClose={closeHandler}
+        onClose={close}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -65,7 +39,7 @@ export default function FromModal(props) {
               aria-label="Close Modal"
               aria-labelledby="close-modal"
               className="_modal-close"
-              onClick={closeHandler}
+              onClick={close}
             >
               <span id="close-modal" className="_hide-visual">
                 Close
@@ -76,12 +50,10 @@ export default function FromModal(props) {
             </button>
             <div className="modal-body">
               {register && (
-                <ConnectedRegister login={openLogin} />
+                <ConnectedRegister/>
               )}
               {login && (
-                <ConnectedLogin
-                  register={openRegister}
-                />
+                <ConnectedLogin/>
               )}
             </div>
           </div>

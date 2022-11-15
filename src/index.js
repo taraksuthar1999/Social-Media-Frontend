@@ -5,7 +5,7 @@ import Home from "./components/Home";
 import store from "./store";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { ModalProvider } from "./context";
+import { ModalProvider } from "./contexts/context";
 import "./index.css";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

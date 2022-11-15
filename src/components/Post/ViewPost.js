@@ -1,4 +1,3 @@
-import { usePost } from "../../contexts/PostProvider";
 import { Box } from "@mui/system";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
@@ -10,64 +9,170 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import CommentList from "../Comment/CommentList";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import { useContext, useEffect } from "react";
+import { useState } from "react";
+import { useFormik, FormikProvider, Form } from "formik";
+import * as Yup from "yup";
+import { connect, useDispatch, useSelector } from "react-redux";
+import {actions} from "../../store/post/actions";
+import { useParams } from "react-router-dom";
+import { SocketContext } from "../../contexts/context";
+import * as React from "react";
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import { ModalContext } from "../../contexts/context";
+// import { commentAdd } from "../../services/commentServices";
+// import { getPost } from "../../services/post";
+
+const validationSchema = Yup.object({
+  message: Yup.string()
+    .required("Message is required")
+    .min(5, "Too short")
+    .label("message"),
+});
+
+const dateFormatter = new Intl.DateTimeFormat(undefined,{
+    dateStyle:'medium',
+    timeStyle:'short'
+})
 
 
 
+function ViewPost(props){
+    const {like,unlike,fetchLike,fetchComment,listenForLike,isLiked} = React.useContext(SocketContext);
+    // const [post,setPost] = useState({})
+    const [commentCount,setCommentCount] = useState(false)
+    const {openLogin} = React.useContext(ModalContext)
+    const user = useSelector(state=>state.auth.user) ?? null
+    const {id} = useParams()
+    const [likes,setLikes] = useState(0)
+    const [comments,setComments] = useState(0)
+    const [liked,setLiked] = useState(false)
+  
+  
+    const initialState = {
+        message: "",
+    };
+    const [initFormData,setInitFormData] = useState(initialState);
 
-export default function ViewPost(){
-    const {post,comments} = usePost()
-    return (
-            <Grid container>
+    useEffect(()=>{
+        fetchComment(id,(count)=>{
+            setComments(count)
+        })
+        props.getPost({id})
+    },[commentCount])
+    
+    const onSubmit = async (formData) => {
+        props.commentAdd({message:formData.message,parentId:props.post._id,callback:()=>setCommentCount(prev=>!prev)})
+    };
+    
+    const formik = useFormik({
+        initialValues: initFormData,
+        validationSchema: validationSchema,
+        enableReinitialize: true,
+        onSubmit: (values,{resetForm}) =>{           
+            onSubmit(values)
+            resetForm(initialState)
+        } 
+    });
+    const { handleChange, handleSubmit, values, errors, touched, handleBlur } =
+    formik;
+    
+    const likeHandler = async(callback)=>{
+        callback(id,user?._id,(state)=>{
+          setLiked(state)
+        })
+    }
+
+    useEffect(()=>{
+        if(user) isLiked(id,user._id,(state)=>{
+            setLiked(state) 
+        })
+    },[user])
+
+
+    useEffect(()=>{
+        fetchLike(id,(count)=>{
+          setLikes(count)
+        })
+      },[liked])
+
+    return props.loading?
+        <><p>loading..</p>
+        </>:<Grid container>
                 <Grid item md={8}>
                         <Box sx={{maxWidth:'sm',margin:'25px auto',border:"1px solid rgba(0, 0, 0, 0.12)"}}>
                             <Card sx={{ boxShadow:0,borderRadius:0,padding:'15px'}}>
                                 <Box mb={3}>
-                                <Typography><Link color="text.primary" fontSize={'1.5em'} underline="none">{post.title}</Link></Typography>
+                                <Typography><Link color="text.primary" fontSize={'1.5em'} underline="none">{props.post?.title}</Link></Typography>
                                 </Box>
                                 <Box mb={3}>
                                     <Box display={'flex'}>
-                                        <Typography><Link color="text.primary" fontSize={'0.8em'} underline="none">{post.company}</Link></Typography>
-                                        <Typography sx={{ '&::before':{ content:'" | @"',marginLeft:"5px",fontSize:'0.8em'}}}><Link color="text.primary" fontSize="0.8em" underline="none">{post.userName}</Link></Typography>
+                                        <Typography><Link color="text.primary" fontSize={'0.8em'} underline="none">{props.post?.user[0].company}</Link></Typography>
+                                        <Typography sx={{ '&::before':{ content:'" | @"',marginLeft:"5px",fontSize:'0.8em'}}}><Link color="text.primary" fontSize="0.8em" underline="none">{props.post?.user[0].userName}</Link></Typography>
                                     </Box>
                                     <Box display={'flex'}>
-                                        <Typography color='text.secondary'><AccessTimeIcon /></Typography>
-                                        <Typography color='text.secondary'>2h</Typography>
+                                        <AccessTimeIcon fontSize="small" /><span>{props.post?.createdAt?dateFormatter.format(Date.parse(props.post?.createdAt)):null}</span>
                                     </Box>
                                 </Box>
                                 <Box mb={3}>
                                     <Typography justifyContent="left" variant="body2" color="text.secondary">
-                                    <Link color='text.secondary'  underline="none">{post.body}</Link>
+                                    <Link color='text.secondary'  underline="none">{props.post?.body}</Link>
                                     </Typography>
                                 </Box>
                                 <Divider/>
                                 <Box mt={2}>
-                                    <IconButton aria-label="like">
-                                        <ThumbUpOffAltIcon sx={{color:'black'}}/><Typography color='text.primary' sx={{fontSize:"0.5em"}}>{post.likes}</Typography>
-                                    </IconButton>
+                                    {user?(liked?(
+                                        <IconButton aria-label="like" onClick={()=>likeHandler(unlike)}>
+                                            <ThumbUpAltIcon sx={{color:'red'}} fontSize="small" ></ThumbUpAltIcon><Typography color='text.primary' sx={{fontSize:"0.5em"}}>{likes}</Typography>
+                                        </IconButton>
+                                    ):(
+                                        <IconButton aria-label="like" onClick={()=>likeHandler(like)}>
+                                        <ThumbUpOffAltIcon sx={{color:'black'}} fontSize="small" /><Typography color='text.primary' sx={{fontSize:"0.5em"}}>{likes}</Typography>
+                                        </IconButton>
+                                    )):(
+                                        <IconButton aria-label="like" onClick={()=>openLogin()}>
+                                        <ThumbUpOffAltIcon sx={{color:'black'}} fontSize="small" /><Typography color='text.primary' sx={{fontSize:"0.5em"}}>{likes}</Typography>
+                                        </IconButton>
+                                    )}
                                     <IconButton aria-label="comment">
-                                        <ChatBubbleOutlineIcon sx={{color:'black'}}/><Typography color='text.primary' sx={{fontSize:"0.5em"}}>{post.commentCount}</Typography>
+                                        <ChatBubbleOutlineIcon sx={{color:'black'}}/><Typography color='text.primary' sx={{fontSize:"0.5em"}}>{comments}</Typography>
                                     </IconButton>
                                 </Box>
                             </Card>
                         </Box>
                         <Box sx={{ maxWidth:'sm',margin:'25px auto',border:"1px solid rgba(0, 0, 0, 0.12)",padding:"15px"}}>
-                            {/* <Link><Typography>Add Comment</Typography></Link> */}
-                           <Box display={"flex"}>
-                            <TextField placeholder="Comment" fullWidth />
-                            <Button>Post</Button>
-                           </Box>
+                            <FormikProvider value={formik}>
+                                <Form onSubmit={handleSubmit}>
+                                    <Box display={"flex"}>
+                                    <TextField fullWidth 
+                                        name="message"
+                                        placeholder="Comment"
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        value={values.message}
+                                        error={errors.message && touched.message}
+                                        helperText={errors.message && touched.message ? errors.email : null}
+                                    />
+                                    {user?<Button type="submit">Post</Button>:<Button onClick={()=>openLogin()}>Post</Button>}
+                                    </Box>
+                                </Form>
+                            </FormikProvider>
                         </Box>
                         <Box sx={{ maxWidth:'sm',margin:'25px auto',border:"1px solid rgba(0, 0, 0, 0.12)"}}>
                             <Box sx={{padding:"15px",fontSize:"0.5em"}}>
-                                <Typography>{post.commentCount} Comments</Typography>
+                                <Typography>{5} Comments</Typography>
                             </Box>
                             <Divider/>
                             <Box>
-                                <CommentList comments={comments}/>
+                                <CommentList comments={props.post?.comments}/>
                             </Box>
                         </Box>
                 </Grid>
             </Grid>
-    )
            
 }
+
+const commentAdd = actions.commentAdd
+const getPost = actions.getPost
+const ConnectedViewPost = connect((state) => state.post, { commentAdd ,getPost})(ViewPost);
+export default ConnectedViewPost;

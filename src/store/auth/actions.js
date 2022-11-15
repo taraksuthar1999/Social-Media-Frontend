@@ -1,6 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
-import { setAuthToken } from "../../App";
+import axios from "axios";
+
+
+const setAuthToken =token=>{
+  if(token) axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
+  else delete axios.defaults.headers.common["Authorization"]
+}
+
 const initialState = {
   error: {
     message: "",
@@ -24,6 +31,7 @@ const authReducer = createSlice({
       state.loading = false;
       state.token = payload.data.data.token;
       state.data = payload.data.data
+      state.user = payload.data.data
       state.error.message = ''
       Cookies.set(TOKEN, payload.data.data.token, { path: "/" });
       setAuthToken(payload.data.data.token)

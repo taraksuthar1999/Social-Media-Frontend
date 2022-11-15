@@ -9,10 +9,34 @@ import { Box } from "@mui/material";
 import { BrowserRouter as Router } from "react-router-dom";
 import Cookies from "js-cookie";
 import FromModal from "./components/Auth/FormModel";
+import { connect, useDispatch, useSelector } from "react-redux";
+import { ConstructionOutlined } from "@mui/icons-material";
+import {actions} from "./store/auth/actions";
 
-
+const token = Cookies.get('token')
+console.log('tokeng ',token)
+export const setAuthToken =token=>{
+  if(token) axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
+  else delete axios.defaults.headers.common["Authorization"]
+}
+const getProfile = actions.getProfile
 
 function App(props){
+
+
+    useEffect(()=>{
+      console.log(token,'token')
+      setAuthToken(token)
+    },[token])
+
+
+    useEffect(()=>{
+        console.log(props.user)
+        if(!props.user && token){
+          props.getProfile()
+        }
+    },[props.user])
+
 
     return (
       <Box sx={{ display: 'flex' }}>
@@ -25,11 +49,5 @@ function App(props){
     );
 
 }
-export const setAuthToken =token=>{
-  console.log(token,'set')
-  if(token) axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
-  else delete axios.defaults.headers.common["Authorization"]
-}
-const token = Cookies.get('token')
-if(token) setAuthToken(token);
-export default App;
+const ConnectedApp = connect((state) => state.auth,{getProfile})(App);
+export default ConnectedApp;

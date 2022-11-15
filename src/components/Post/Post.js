@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { getPost } from "../../services/post";
-import { PostList } from "./PostList";
 import * as React from "react";
 import Link from '@mui/joy/Link';
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
@@ -11,6 +9,7 @@ import CardActions from "@mui/material/CardActions";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
@@ -21,30 +20,73 @@ import { Divider } from "@mui/material";
 import io from 'socket.io-client'
 import { useEffect } from "react";
 import { resolveTo } from "@remix-run/router";
-import { SocketContext } from "../../context";
+import { ModalContext, SocketContext } from "../../contexts/context";
+import { SettingsCellOutlined } from "@mui/icons-material";
+import {Chip} from "@mui/material";
+import { useSelector } from "react-redux";
+
+const dateFormatter = new Intl.DateTimeFormat(undefined,{
+  dateStyle:'medium',
+  timeStyle:'short'
+})
 
 export default function Post({data}) {
-  const {socket} = React.useContext(SocketContext);
-   
-  function likeHandler(postId){
-      socket.emit('like',"636e0b59c7b6f19eab8cb58b",(res)=>{
-        console.log(res)
-      })
+  const {like,view,unlike,fetchLike,listenForLike,listenForView,fetchView,isLiked,listenForComment} = React.useContext(SocketContext);
+  const {openLogin} = React.useContext(ModalContext)
+  const user = useSelector(state=>state.auth.user) ?? null
+  const [liked,setLiked] = useState(false)
+  const [likes,setLikes] = useState(data.likes)
+  const [views,setViews] = useState(data.views)
+  const [comments,setComments] = useState(data.comments)
+  const navigate =  useNavigate()
+
+  const likeHandler = async(callback)=>{
+    callback(data._id,user?._id,(state)=>{
+      setLiked(state)
+    })
   }
+
+  const read = ()=>{
+    view(data._id)
+    navigate(`/post/${data._id}`)
+  }
+
+  useEffect(()=>{
+    fetchView(data._id,(count)=>{
+      setViews(count)
+    })
+  },[views])
+
+  useEffect(()=>{
+      listenForLike(data._id,(count)=>{
+        setLikes(count)
+      })
+      listenForView(data._id,(count)=>{
+        setViews(count)
+      })
+      isLiked(data._id,user?._id,(state)=>{
+        setLiked(state) 
+      })
+  },[user])
+
+  useEffect(()=>{
+    fetchLike(data._id,(count)=>{
+      setLikes(count)
+    })
+  },[liked])
+
   return (
     <Card sx={{ maxWidth:'sm',boxShadow:0,borderRadius:0,padding:'15px'}}>
-      <Box>
+      <Box mb={1}>
           <Link component={RouterLink}  to={'/'}  underline="none">
-            <Typography fontSize={'0.8em'} color="text.secondary">
-              {data.tag}
-            </Typography>
+              {data.tag.length && data.tag.map((chip)=><Chip key={chip} label={chip} sx={{marginRight:1}} size="small" variant="outlined" />)} 
           </Link>
       </Box>
       <Box mb={3}>
-      <Link  underline="none" component={RouterLink} to={'/post/'+data.id}><Typography fontWeight={'bold'} fontSize={'1.2em'} color="text.primary">{data.title.length>50?data.title?.slice(0,50)+'...':data.title}</Typography></Link>
+      <Link  underline="none" onClick={()=>read()}><Typography fontWeight={'bold'} fontSize={'1.2em'} color="text.primary">{data.title.length>50?data.title?.slice(0,50)+'...':data.title}</Typography></Link>
       </Box>
       <Box mb={3}>
-          <Link color='text.secondary'  underline="none" component={RouterLink} to={'/post/'+data.id}>
+          <Link color='text.secondary' onClick={()=>read()}  underline="none">
             <Typography justifyContent="left" variant="body2" color="text.secondary">
                 {data.body?.slice(0,150)+'...'}
             </Typography>
@@ -52,21 +94,31 @@ export default function Post({data}) {
       </Box>
       <Box >
         <Box display={'flex'}>
-            <Typography><Link color="text.primary" fontSize={'0.8em'} underline="none">{data.company}</Link></Typography>
-            <Typography sx={{ '&::before':{ content:'" | @"',marginLeft:"5px",fontSize:'0.8em'}}}><Link color="text.primary" fontSize="0.8em" underline="none">{data.userName}</Link></Typography>
+            <Typography><Link color="text.primary" fontSize={'0.8em'} underline="none">{data.user[0].company}</Link></Typography>
+            <Typography sx={{ '&::before':{ content:'" | @"',marginLeft:"5px",fontSize:'0.8em'}}}><Link color="text.primary" fontSize="0.8em" underline="none">{data.user[0].userName}</Link></Typography>
         </Box>
         <Box>
-          <IconButton aria-label="read">
-            <VisibilityIcon sx={{color:'black'}} fontSize="small" /><Typography color='text.primary' sx={{fontSize:"0.5em"}}>{data.reads}</Typography>
+          <IconButton aria-label="read" onClick={()=>read()}>
+            <VisibilityIcon sx={{color:'black'}} fontSize="small" /><Typography color='text.primary' sx={{fontSize:"0.5em"}}>{views}</Typography>
           </IconButton>
-          <IconButton aria-label="like" onClick={()=>likeHandler(data.id)}>
-            <ThumbUpOffAltIcon sx={{color:'black'}} fontSize="small" /><Typography color='text.primary' sx={{fontSize:"0.5em"}}>{data.likes}</Typography>
-          </IconButton>
+          {user?(liked?(
+            <IconButton aria-label="like" onClick={()=>likeHandler(unlike)}>
+              <ThumbUpAltIcon sx={{color:'red'}} fontSize="small" ></ThumbUpAltIcon><Typography color='text.primary' sx={{fontSize:"0.5em"}}>{likes}</Typography>
+            </IconButton>
+          ):(
+            <IconButton aria-label="like" onClick={()=>likeHandler(like)}>
+              <ThumbUpOffAltIcon sx={{color:'black'}} fontSize="small" /><Typography color='text.primary' sx={{fontSize:"0.5em"}}>{likes}</Typography>
+            </IconButton>
+          )):(
+            <IconButton aria-label="like" onClick={()=>openLogin()}>
+              <ThumbUpOffAltIcon sx={{color:'black'}} fontSize="small" /><Typography color='text.primary' sx={{fontSize:"0.5em"}}>{likes}</Typography>
+            </IconButton>
+          )}
           <IconButton aria-label="comment">
-            <ChatBubbleOutlineIcon sx={{color:'black'}} fontSize="small" /><Typography color='text.primary' sx={{fontSize:"0.5em"}}>{data.comments}</Typography>
+            <ChatBubbleOutlineIcon sx={{color:'black'}} fontSize="small" /><Typography color='text.primary' sx={{fontSize:"0.5em"}}>{comments}</Typography>
           </IconButton>
           <IconButton>
-            <Typography sx={{fontSize:"0.5em"}}>2h</Typography>
+            <Typography sx={{fontSize:"0.5em"}}>{dateFormatter.format(Date.parse(data.createdAt))}</Typography>
           </IconButton>
         </Box>
       </Box>

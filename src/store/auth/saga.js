@@ -17,7 +17,6 @@ function* login({ payload }) {
     yield put(actions.loginSuccess(response));
     payload.onLoginSuccess()
   } catch (error) {
-    console.log(error)
     yield put(actions.loginFailed(error?.response?.data?.message));
   }
 }
@@ -48,13 +47,24 @@ function* logout({ payload }) {
         });
     });
     yield put(actions.logoutSuccess({}));
-    payload.onLogoutSuccess()
+    payload?.onLogoutSuccess()
   } catch (error) {
     console.log(error)
   }
 }
 function* getProfile({ payload }) {
-  console.log("getProfile", payload);
+    try {
+      const response = yield call(async () => {
+        return await axios
+          .get("http://localhost:3009/api/v1/auth/profile")
+          .then((res) => {
+            return res;
+          });
+      });
+      yield put(actions.loginSuccess(response))
+    } catch (error) {
+      yield put(actions.logoutSuccess({}))
+    }
 }
 export function* authSaga() {
   yield takeEvery(actions.login, login);

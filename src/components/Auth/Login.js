@@ -8,7 +8,7 @@ import { Alert } from "@mui/material";
 import { Box } from "@mui/system";
 import { actions } from "../../store/auth/actions";
 import Loading from "../../utils/Loading";
-import { ModalContext } from "../../context";
+import { ModalContext } from "../../contexts/context";
 
 const initialState = {
   email: "",
@@ -25,12 +25,13 @@ const validationSchema = Yup.object({
 
 const Login = (props) => {
   const [initFormData] = useState(initialState);
-  const {setIsShown} = React.useContext(ModalContext)
+  const {close,openRegister} = React.useContext(ModalContext)
   const navigate = useNavigate();
 
   const onLoginSuccess =()=>{
-    setIsShown(false)
-    navigate('/welcome')
+    close()
+    console.log(props.auth)
+    navigate('/')
   } 
   const onSubmit = async (formData) => {
     props.login({...formData,onLoginSuccess});
@@ -114,7 +115,7 @@ const Login = (props) => {
             <Grid item>
               <span>New to App?</span>&nbsp;
               <Link
-                onClick={props.register}
+                onClick={openRegister}
                 underline="none"
                 sx={{ fontWeight: "bold", color: "turquoise" }}
               >

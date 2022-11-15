@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import FormModal from './Auth/FormModel'
-import { ModalContext,ModalProvider } from "../context";
+import { ModalContext,ModalProvider } from "../contexts/context";
 import { useSelector } from "react-redux";
 import { authSaga } from "../store/auth/saga";
 import { useSelect } from "@mui/base";
