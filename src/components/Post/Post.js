@@ -3,25 +3,15 @@ import * as React from "react";
 import Link from '@mui/joy/Link';
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { Box } from "@mui/system";
-import { fontSize } from "@mui/system";
-import { Divider } from "@mui/material";
-import io from 'socket.io-client'
 import { useEffect } from "react";
-import { resolveTo } from "@remix-run/router";
 import { ModalContext, SocketContext } from "../../contexts/context";
-import { SettingsCellOutlined } from "@mui/icons-material";
 import {Chip} from "@mui/material";
 import { useSelector } from "react-redux";
 
@@ -34,7 +24,7 @@ export default function Post({data}) {
   const {like,view,unlike,fetchLike,listenForLike,listenForView,fetchView,isLiked,listenForComment} = React.useContext(SocketContext);
   const {openLogin} = React.useContext(ModalContext)
   const user = useSelector(state=>state.auth.user) ?? null
-  const [liked,setLiked] = useState(false)
+  const [liked,setLiked] = useState(data.isLiked)
   const [likes,setLikes] = useState(data.likes)
   const [views,setViews] = useState(data.views)
   const [comments,setComments] = useState(data.comments)
@@ -63,6 +53,9 @@ export default function Post({data}) {
       })
       listenForView(data._id,(count)=>{
         setViews(count)
+      })
+      listenForComment(data._id,(count)=>{
+        setComments(count)
       })
       isLiked(data._id,user?._id,(state)=>{
         setLiked(state) 

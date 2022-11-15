@@ -7,6 +7,7 @@ const initialState = {
   data:null,
   loading: false,
   post:null,
+  comments:null,
   posts:[]
 };
 const postReducer = createSlice({
@@ -35,6 +36,15 @@ const postReducer = createSlice({
     },
     commentAddSuccess:(state,{})=>{
         state.loading = false
+    },
+    getCommentsByParentId:(state,{payload})=>{
+      state.loading = true
+      state.data = payload
+    },
+    getCommentsByParentIdSuccess:(state,{payload})=>{
+      console.log(payload)
+        // state.loading = false
+        // state.comments = payload
     }
   },
 });

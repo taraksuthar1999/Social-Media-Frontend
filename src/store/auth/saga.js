@@ -9,7 +9,7 @@ function* login({ payload }) {
     const {email,password} = payload
     const response = yield call(async () => {
       return await axios
-        .post("http://localhost:3009/api/v1/auth/login",{email,password})
+        .post(`${process.env.REACT_APP_BASE_URL}/auth/login`,{email,password})
         .then((res) => {
           return res;
         });
@@ -25,7 +25,7 @@ function* register({ payload }) {
     const {userName,email,password} = payload;
     const response = yield call(async () => {
       return await axios
-        .post("http://localhost:3009/api/v1/auth/register", {userName,email,password})
+        .post(`${process.env.REACT_APP_BASE_URL}/auth/register`, {userName,email,password})
         .then((res) => {
           console.log(res);
           return res;
@@ -41,7 +41,7 @@ function* logout({ payload }) {
   try {
     const response = yield call(async () => {
       return await axios
-        .get("http://localhost:3009/api/v1/auth/logout")
+        .get(`${process.env.REACT_APP_BASE_URL}/auth/logout`)
         .then((res) => {
           return res;
         });
@@ -56,7 +56,7 @@ function* getProfile({ payload }) {
     try {
       const response = yield call(async () => {
         return await axios
-          .get("http://localhost:3009/api/v1/auth/profile")
+          .get(`${process.env.REACT_APP_BASE_URL}/auth/profile`)
           .then((res) => {
             return res;
           });

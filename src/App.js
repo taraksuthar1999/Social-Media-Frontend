@@ -31,8 +31,9 @@ function App(props){
 
 
     useEffect(()=>{
-        console.log(props.user)
+        console.log(props.user,token)
         if(!props.user && token){
+          console.log('dfsh')
           props.getProfile()
         }
     },[props.user])

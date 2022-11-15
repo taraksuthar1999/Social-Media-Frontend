@@ -19,17 +19,6 @@ const style = {
 };
 
 export default function LoadingModal(props) {
-  //   const [open, setOpen] = React.useState(props.state);
-  const ref = React.useRef(null);
-  //   const handleOpen = () => setOpen(true);
-  //   const handleClose = () => setOpen(false);
-  const handleClickOutside = (e) => {
-    if (ref.current && !ref.current.contains(e.target)) {
-      //   props.handler();
-      //   setOpen && setOpen(false);
-    }
-  };
-
   return (
     <div>
       <Modal
@@ -44,23 +33,6 @@ export default function LoadingModal(props) {
           aria-modal="true"
           className="modal-cover"
         >
-          {/* <div ref={ref} className="modal-area">
-            <button
-              aria-label="Close Modal"
-              aria-labelledby="close-modal"
-              className="_modal-close"
-            >
-              <span id="close-modal" className="_hide-visual">
-                Close
-              </span>
-              <svg className="_modal-close-icon" viewBox="0 0 40 40">
-                <path d="M 10,10 L 30,30 M 30,10 L 10,30" />
-              </svg>
-            </button>
-            <div className="modal-body">
-              <Loading />
-            </div>
-          </div> */}
           <Loading />
         </aside>
       </Modal>

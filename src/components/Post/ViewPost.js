@@ -5,23 +5,20 @@ import Link from '@mui/joy/Link';
 import { Button, Divider, Grid, TextField } from "@mui/material";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import CommentList from "../Comment/CommentList";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import { useFormik, FormikProvider, Form } from "formik";
 import * as Yup from "yup";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import {actions} from "../../store/post/actions";
 import { useParams } from "react-router-dom";
 import { SocketContext } from "../../contexts/context";
 import * as React from "react";
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import { ModalContext } from "../../contexts/context";
-// import { commentAdd } from "../../services/commentServices";
-// import { getPost } from "../../services/post";
+import LoadingModal from "../../utils/LoadingModal";
 
 const validationSchema = Yup.object({
   message: Yup.string()
@@ -38,15 +35,14 @@ const dateFormatter = new Intl.DateTimeFormat(undefined,{
 
 
 function ViewPost(props){
-    const {like,unlike,fetchLike,fetchComment,listenForLike,isLiked} = React.useContext(SocketContext);
-    // const [post,setPost] = useState({})
+    const {like,unlike,fetchLike,fetchComment,listenForLike,isLiked,listenForComment} = React.useContext(SocketContext);
     const [commentCount,setCommentCount] = useState(false)
     const {openLogin} = React.useContext(ModalContext)
-    const user = useSelector(state=>state.auth.user) ?? null
     const {id} = useParams()
+    const user = useSelector(state=>state.auth.user) ?? null
     const [likes,setLikes] = useState(0)
-    const [comments,setComments] = useState(0)
     const [liked,setLiked] = useState(false)
+    const [comments,setComments] = useState(0)
   
   
     const initialState = {
@@ -59,7 +55,7 @@ function ViewPost(props){
             setComments(count)
         })
         props.getPost({id})
-    },[commentCount])
+    },[comments])
     
     const onSubmit = async (formData) => {
         props.commentAdd({message:formData.message,parentId:props.post._id,callback:()=>setCommentCount(prev=>!prev)})
@@ -84,6 +80,12 @@ function ViewPost(props){
     }
 
     useEffect(()=>{
+        listenForLike(id,(count)=>{
+            setLikes(count)
+         })
+         listenForComment(id,count=>{
+            setComments(count)
+         })
         if(user) isLiked(id,user._id,(state)=>{
             setLiked(state) 
         })
@@ -96,9 +98,7 @@ function ViewPost(props){
         })
       },[liked])
 
-    return props.loading?
-        <><p>loading..</p>
-        </>:<Grid container>
+    return props.loading?<LoadingModal/>:<Grid container>
                 <Grid item md={8}>
                         <Box sx={{maxWidth:'sm',margin:'25px auto',border:"1px solid rgba(0, 0, 0, 0.12)"}}>
                             <Card sx={{ boxShadow:0,borderRadius:0,padding:'15px'}}>
@@ -134,9 +134,6 @@ function ViewPost(props){
                                         <ThumbUpOffAltIcon sx={{color:'black'}} fontSize="small" /><Typography color='text.primary' sx={{fontSize:"0.5em"}}>{likes}</Typography>
                                         </IconButton>
                                     )}
-                                    <IconButton aria-label="comment">
-                                        <ChatBubbleOutlineIcon sx={{color:'black'}}/><Typography color='text.primary' sx={{fontSize:"0.5em"}}>{comments}</Typography>
-                                    </IconButton>
                                 </Box>
                             </Card>
                         </Box>
@@ -160,7 +157,7 @@ function ViewPost(props){
                         </Box>
                         <Box sx={{ maxWidth:'sm',margin:'25px auto',border:"1px solid rgba(0, 0, 0, 0.12)"}}>
                             <Box sx={{padding:"15px",fontSize:"0.5em"}}>
-                                <Typography>{5} Comments</Typography>
+                                <Typography>{comments} Comments</Typography>
                             </Box>
                             <Divider/>
                             <Box>

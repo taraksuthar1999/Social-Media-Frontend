@@ -8,17 +8,10 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import NavbarButtons from './NavbarButtons';
 import NavbarProfile from './NavbarProfile';
-import { useMediaQuery } from '@mui/material';
 
-
-import PropTypes from 'prop-types';
 import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
+
 
 const drawerWidth = 240;
 

@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import "./Loading.css";
 function Loading() {
   return (
